@@ -31,11 +31,10 @@
 	</properties>
 	<dependencies>
 <!-- added by me -->
-	<!-- <dependency>
-		<groupId>org.hibernate</groupId>
-		<artifactId>hibernate-core</artifactId>
-		<version>6.6.10.Final</version>
-	</dependency> -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-websocket</artifactId>
+	</dependency>
 
 <!-- without this package hibernate wont work since hibernate is actually inside jpa -->
     <dependency>
