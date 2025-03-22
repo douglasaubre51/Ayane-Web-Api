@@ -1,6 +1,7 @@
 package realtime.videocall.app.configuration;
 
 import realtime.videocall.app.handlers.*;
+
 import org.springframework.web.socket.config.annotation.*;
 import org.springframework.context.annotation.*;
 

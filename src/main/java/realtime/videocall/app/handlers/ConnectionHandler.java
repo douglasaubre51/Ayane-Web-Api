@@ -1,25 +1,33 @@
 package realtime.videocall.app.handlers;
 
-import org.springframework.web.socket.handler.*;
-import org.springframework.web.socket.*;
-import java.util.*;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
-public class ConnectionHandler extends TextWebSocketHandler {
-    List<WebSocketSession> webSocketSession = Collections.synchronizedList(new ArrayList<>());
+import javax.websocket.Session;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.CloseStatus;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
+
+public class ConnectionHandler extends AbstractWebSocketHandler {
+    private List<Session> webSocketSession = Collections.synchronizedList(new ArrayList<>());
+    private Map<String, Long> clients = Collections.synchronizedMap(new HashMap<>());
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(Session session) throws Exception {
         super.afterConnectionEstablished(session);
 
-        System.out.println("user" +
-                session.getId() + " connected to server");
+        System.out.println("user" + session.getId() + " connected to server");
         webSocketSession.add(session);
 
-        session.sendMessage(new TextMessage("welcome to soul society!"));
+        session.sendMessage(new TextMessage(session.getId()));
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(Session session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
 
         System.out.println("user " + session.getId() + "disconnected");
@@ -27,11 +35,7 @@ public class ConnectionHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        for (WebSocketSession s : webSocketSession) {
-            if (s != session) {
-                s.sendMessage(message);
-            }
-        }
+    public void handleTextMessage(Session session, TextMessage message) throws Exception {
+
     }
 }
