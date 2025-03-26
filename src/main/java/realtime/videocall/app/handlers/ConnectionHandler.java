@@ -1,42 +1,36 @@
 package realtime.videocall.app.handlers;
 
-import org.springframework.web.socket.server.standard.SpringConfigurator;
+import java.util.*;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.socket.WebSocketMessage;
+import org.springframework.web.socket.*;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collections;
+public class ConnectionHandler extends TextWebSocketHandler {
+    List<WebSocketSession> webSocketSessions = Collections.synchronizedList(new ArrayList<>());
 
-import jakarta.websocket.Session;
-import jakarta.websocket.server.ServerEndpoint;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnError;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        super.afterConnectionEstablished(session);
+        System.out.println(session.getId() + " connected");
 
-//i added the springconfigurator.class since server endpoints are not detected by spring
-@ServerEndpoint(value = "/stream", configurator = SpringConfigurator.class)
-public class ConnectionHandler {
-    private List<Session> Sessions = Collections.synchronizedList(new ArrayList<>());
-    // private Map<String, Long> ClientSessions = Collections.synchronizedMap(new
-    // HashMap<>());
-
-    @OnOpen
-    private void OnClientConnection(Session session) {
-        System.out.println("client connected: " + session.getId());
-        Sessions.add(session);
-        session.getAsyncRemote().sendText("yokoso! watashi no soul society ye!");
+        webSocketSessions.add(session);
+        session.sendMessage(new TextMessage("welcome to the soul society!"));
     }
 
-    @OnClose
-    private void OnClientDisconnection(Session session) {
-        System.out.println("client disconnected: " + session.getId());
-        Sessions.remove(session);
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        super.afterConnectionClosed(session, status);
+        System.out.println("connection closed by:" + session.getId());
+
+        webSocketSessions.remove(session);
     }
 
-    @OnError
-    private void onClientConnectionError(Session session) {
-        System.out.println("client disconnected: " + session.getId());
+    @Override
+    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+        for (WebSocketSession s : webSocketSessions) {
+            if (s != session) {
+                s.sendMessage(message);
+            }
+        }
     }
 }
