@@ -6,9 +6,9 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://sql12.freesqldatabase.com:3306/sql12769194</property>
-        <property name="hibernate.connection.username">sql12769194</property>
-        <property name="hibernate.connection.password">JHHpMcu4Cf</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/AyaneDb</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">password</property>
 
         <!-- Hibernate settings -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -17,5 +17,6 @@
 
         <!-- Entity mappings -->
         <mapping class="realtime.videocall.app.entities.User"/>
+        <mapping class="realtime.videocall.app.entities.Books"/>
     </session-factory>
 </hibernate-configuration>
