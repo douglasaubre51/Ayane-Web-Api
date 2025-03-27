@@ -50,7 +50,7 @@ public class AyaneUserController {
     public ResponseEntity<Books> getBook(@RequestParam String name) {
         Books books = _bookService.getBook(name);
 
-        if(books!=null){
+        if (books != null) {
             return ResponseEntity.ok().body(books);
         }
 
@@ -58,12 +58,13 @@ public class AyaneUserController {
     }
 
     @PostMapping("addBooks")
-    public ResponseEntity<Book> addNewBook(@RequestBody Book book){
-        Book bookToAdd=new Book();
-        bookToAdd.name=book.name;
-        bookToAdd.author=book.author;
-        bookToAdd.price=book.price;
-        
+    public ResponseEntity<Book> addNewBook(@RequestBody Book book) {
+        Book bookToAdd = new Book();
+        bookToAdd.name = book.name;
+        bookToAdd.author = book.author;
+        bookToAdd.price = book.price;
+
         return ResponseEntity.status(201).body(bookToAdd);
     }
+
 }

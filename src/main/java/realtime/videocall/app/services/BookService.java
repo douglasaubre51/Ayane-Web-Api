@@ -12,39 +12,38 @@ import org.springframework.stereotype.Service;
 import realtime.videocall.app.repositories.IBookRepository;
 
 import realtime.videocall.app.entities.*;
+
 @Service
 public class BookService {
     @Autowired
     IBookRepository _repository;
 
-    public List<Books> getAllBooks(){
-        SessionFactory factory=new Configuration().configure().buildSessionFactory();
-        Session session=factory.openSession();
-        
-        try{
-            String getAllBooksQuery="select * from Books";
+    public List<Books> getAllBooks() {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
 
-            Query<Books> bookList=session.createQuery(getAllBooksQuery,Books.class);
+        try {
+            String getAllBooksQuery = "select b from books b";
+
+            Query<Books> bookList = session.createQuery(getAllBooksQuery, Books.class);
             return bookList.list();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-    } 
+    }
 
-    public Books getBook(String name){
-        SessionFactory factory=new Configuration().configure().buildSessionFactory();
-        Session session=factory.openSession();
-        
-        try{
-            String getAllBooksQuery="select * from Books b where b.name=:name";
+    public Books getBook(String name) {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
+        Session session = factory.openSession();
 
-            Query<Books> book=session.createQuery(getAllBooksQuery,Books.class);
-            book.setParameter("name",name);
+        try {
+            String getBookQuery = "select b from books b where b.name=:name";
+
+            Query<Books> book = session.createQuery(getBookQuery, Books.class);
+            book.setParameter("name", name);
             return book.uniqueResult();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
